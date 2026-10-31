@@ -20,7 +20,11 @@ st.markdown(
 # 1. تحميل النموذج (تأكد أن ملف rutab_sorter_model.h5 موجود في نفس المجلد)
 @st.cache_resource
 def load_model():
-    return tf.keras.models.load_model('rutab_sorter_model.h5')
+    import os
+
+# تحديد المسار المطلق لملف النموذج بناءً على مكان ملف app.py
+model_path = os.path.join(os.path.dirname(__file__), "rutab_sorter_model.h5")
+model = tf.keras.models.load_model(model_path)
 
 try:
     model = load_model()
