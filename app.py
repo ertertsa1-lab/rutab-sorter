@@ -47,7 +47,8 @@ if uploaded_file is not None:
     
     st.write(f"🔢 القيمة الرقمية الخام (Raw Score): `{pred_value:.4f}`")
     
-    if pred_value > 0.5:
-        st.success(f"✅ **النتيجة: رطب جيد (Good)** (الثقة: {pred_value * 100:.1f}%)")
+    # عكس الشرط لتصحيح الترتيب الأبجدي للفئات
+    if pred_value < 0.5:
+        st.success(f"✅ **النتيجة: رطب جيد (Good)** (الثقة: {(1 - pred_value) * 100:.1f}%)")
     else:
-        st.error(f"❌ **النتيجة: رطب فاسد / سيء (Bad)** (الثقة: {(1 - pred_value) * 100:.1f}%)")
+        st.error(f"❌ **النتيجة: رطب فاسد / سيء (Bad)** (الثقة: {pred_value * 100:.1f}%)")
