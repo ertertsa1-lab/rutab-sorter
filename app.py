@@ -70,7 +70,7 @@ with col_res:
             score = prediction[0][0]
             
             # عتبة الصرامة العالية
-            strictness_threshold = 0.75 
+            strictness_threshold = 0.55 
             is_bad = score < strictness_threshold
             
             if lang == "العربية":
