@@ -5,7 +5,7 @@ import numpy as np
 
 st.set_page_config(page_title="نظام فرز وتصنيف الرطب", page_icon="🌴", layout="centered")
 
-st.title("🌴 نظام فرز وتصنيف الرطب الذكي")
+st.title("🌴 نظام فرز وتصنيف التمر الذكي")
 
 @st.cache_resource
 def load_trained_model():
@@ -38,6 +38,6 @@ if uploaded_file is not None:
     st.write(f"🔢 القيمة الخام من النموذج: `{pred_value:.4f}`")
     
     if pred_value > 0.5:
-        st.success(f"✅ النتيجة: رطب جيد (Good) - نسبة الثقة: {pred_value * 100:.1f}%")
+        st.success(f"✅ النتيجة: التمر جيد (Good) - نسبة الثقة: {pred_value * 100:.1f}%")
     else:
-        st.error(f"❌ النتيجة: رطب فاسد / سيء (Bad) - نسبة الثقة: {(1 - pred_value) * 100:.1f}%")
+        st.error(f"❌ النتيجة: التمر فاسد / سيء (Bad) - نسبة الثقة: {(1 - pred_value) * 100:.1f}%")
