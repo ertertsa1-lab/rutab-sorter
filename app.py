@@ -3,6 +3,7 @@ import tensorflow as tf
 from tensorflow.keras.utils import img_to_array
 import numpy as np
 from PIL import Image, ImageOps
+from tensorflow.keras.applications.mobilenet_v2 import preprocess_input  # 🔑 الدالة السرية لـ MobileNetV2
 
 st.set_page_config(page_title="نظام فرز وتصنيف الرطب", page_icon="🌴", layout="centered")
 
@@ -28,17 +29,15 @@ if uploaded_file is not None:
         
     st.image(image, caption='الصورة المرفوعة للفحص', use_container_width=True)
     
-    # 1. تجهيز المقاس
+    # 1. ضبط المقاس بدقة
     img_resized = image.resize((224, 224))
     x = img_to_array(img_resized)
-    
-    # 🔑 2. تطبيع القيم (Normalization) - مطابقة لما تم في التدريب
-    # جرب إزالة أو إبقاء القسمة على 255 حسب ما استخدمت في كولاب
-    x = x / 255.0  
-    
     x = np.expand_dims(x, axis=0)
     
-    # 3. الفحص والتنبؤ
+    # 🔑 2. المعالجة الرسمية الخاصة بـ MobileNetV2 (بديلة للقسمة على 255)
+    x = preprocess_input(x)
+    
+    # 3. التنبؤ الفعلي
     with st.spinner('🔍 جاري التحليل...'):
         pred = model.predict(x)
         pred_value = float(pred[0][0])
@@ -46,8 +45,7 @@ if uploaded_file is not None:
     st.markdown("---")
     st.subheader("📊 النتيجة والتحليل:")
     
-    # عرض القيمة الرقمية الخام لمعرفة ما يراه النموذج فعلياً
-    st.write(f"🔢 القيمة الرقمية الخام من النموذج (Raw Score): `{pred_value:.4f}`")
+    st.write(f"🔢 القيمة الرقمية الخام (Raw Score): `{pred_value:.4f}`")
     
     if pred_value > 0.5:
         st.success(f"✅ **النتيجة: رطب جيد (Good)** (الثقة: {pred_value * 100:.1f}%)")
