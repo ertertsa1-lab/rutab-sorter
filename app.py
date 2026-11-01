@@ -17,20 +17,19 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# 1. تحميل النموذج (تأكد أن ملف rutab_sorter_model.h5 موجود في نفس المجلد)
+# تحميل النموذج مع تخزين مؤقت وحماية
 @st.cache_resource
 def load_model():
     import os
+    model_path = os.path.join(os.path.dirname(__file__), "rutab_sorter_model.h5")
+    if not os.path.exists(model_path):
+        return None
+    return tf.keras.models.load_model(model_path)
 
-# تحديد المسار المطلق لملف النموذج بناءً على مكان ملف app.py
-model_path = os.path.join(os.path.dirname(__file__), "rutab_sorter_model.h5")
-model = tf.keras.models.load_model(model_path)
+model = load_model()
 
-try:
-    model = load_model()
-except:
+if model is None:
     st.error("⚠️ تنبيه: لم يتم العثور على ملف النموذج 'rutab_sorter_model.h5'. تأكد من وضعه مع الملفات.")
-
 # رأس الصفحة واختيار اللغة المصغر
 col1, col2 = st.columns([4, 1])
 with col1:
